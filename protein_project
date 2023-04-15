@@ -1,0 +1,451 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 48,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "c0V10yW8g8iK",
+        "outputId": "8d13fdea-9e91-4ff6-a92c-960fa895b064"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/gdrive\n"
+          ]
+        }
+      ],
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount(\"/content/gdrive\", force_remount=True)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "g05nqp_1hcHw",
+        "outputId": "4326ad6b-46b0-4e24-c720-bc5036dffef3"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/\n",
+            "Requirement already satisfied: virtualenv in /usr/local/lib/python3.9/dist-packages (20.21.0)\n",
+            "Requirement already satisfied: distlib<1,>=0.3.6 in /usr/local/lib/python3.9/dist-packages (from virtualenv) (0.3.6)\n",
+            "Requirement already satisfied: platformdirs<4,>=2.4 in /usr/local/lib/python3.9/dist-packages (from virtualenv) (3.2.0)\n",
+            "Requirement already satisfied: filelock<4,>=3.4.1 in /usr/local/lib/python3.9/dist-packages (from virtualenv) (3.10.7)\n",
+            "created virtual environment CPython3.9.16.final.0-64 in 8794ms\n",
+            "  creator CPython3Posix(dest=/content/gdrive/MyDrive/protein-env, clear=False, no_vcs_ignore=False, global=False)\n",
+            "  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/root/.local/share/virtualenv)\n",
+            "    added seed packages: pip==23.0.1, setuptools==67.4.0, wheel==0.38.4\n",
+            "  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip3 install virtualenv\n",
+        "!virtualenv /content/gdrive/MyDrive/protein-env"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "5RFhoFfcheP8",
+        "outputId": "ed471894-b001-485a-e91f-278baab88aea"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/\n",
+            "Collecting torch_geometric\n",
+            "  Downloading torch_geometric-2.3.0.tar.gz (616 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m616.2/616.2 kB\u001b[0m \u001b[31m15.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting scikit-learn\n",
+            "  Downloading scikit_learn-1.2.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (9.6 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m9.6/9.6 MB\u001b[0m \u001b[31m77.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting requests\n",
+            "  Downloading requests-2.28.2-py3-none-any.whl (62 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.8/62.8 kB\u001b[0m \u001b[31m8.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: numpy in /content/gdrive/MyDrive/protein-env/lib/python3.9/site-packages (from torch_geometric) (1.24.2)\n",
+            "Collecting psutil>=5.8.0\n",
+            "  Downloading psutil-5.9.4-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (280 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m280.2/280.2 kB\u001b[0m \u001b[31m30.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting scipy\n",
+            "  Downloading scipy-1.10.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (34.5 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m34.5/34.5 MB\u001b[0m \u001b[31m32.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting pyparsing\n",
+            "  Downloading pyparsing-3.0.9-py3-none-any.whl (98 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m98.3/98.3 kB\u001b[0m \u001b[31m8.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting jinja2\n",
+            "  Downloading Jinja2-3.1.2-py3-none-any.whl (133 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m133.1/133.1 kB\u001b[0m \u001b[31m15.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting tqdm\n",
+            "  Downloading tqdm-4.65.0-py3-none-any.whl (77 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m77.1/77.1 kB\u001b[0m \u001b[31m9.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting MarkupSafe>=2.0\n",
+            "  Downloading MarkupSafe-2.1.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)\n",
+            "Collecting urllib3<1.27,>=1.21.1\n",
+            "  Downloading urllib3-1.26.15-py2.py3-none-any.whl (140 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m140.9/140.9 kB\u001b[0m \u001b[31m16.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting charset-normalizer<4,>=2\n",
+            "  Downloading charset_normalizer-3.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (199 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m199.2/199.2 kB\u001b[0m \u001b[31m17.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting idna<4,>=2.5\n",
+            "  Downloading idna-3.4-py3-none-any.whl (61 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m61.5/61.5 kB\u001b[0m \u001b[31m7.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting certifi>=2017.4.17\n",
+            "  Downloading certifi-2022.12.7-py3-none-any.whl (155 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m155.3/155.3 kB\u001b[0m \u001b[31m17.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting threadpoolctl>=2.0.0\n",
+            "  Downloading threadpoolctl-3.1.0-py3-none-any.whl (14 kB)\n",
+            "Collecting joblib>=1.1.1\n",
+            "  Downloading joblib-1.2.0-py3-none-any.whl (297 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m298.0/298.0 kB\u001b[0m \u001b[31m19.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hBuilding wheels for collected packages: torch_geometric\n",
+            "  Building wheel for torch_geometric (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for torch_geometric: filename=torch_geometric-2.3.0-py3-none-any.whl size=909897 sha256=53378dec072c51c9e86ea712c70246571fedd172572351aab4ea5d77407c53d1\n",
+            "  Stored in directory: /root/.cache/pip/wheels/cd/7d/6b/17150450b80b4a3656a84330e22709ccd8dc0f8f4773ba4133\n",
+            "Successfully built torch_geometric\n",
+            "Installing collected packages: urllib3, tqdm, threadpoolctl, scipy, pyparsing, psutil, MarkupSafe, joblib, idna, charset-normalizer, certifi, scikit-learn, requests, jinja2, torch_geometric\n",
+            "Successfully installed MarkupSafe-2.1.2 certifi-2022.12.7 charset-normalizer-3.1.0 idna-3.4 jinja2-3.1.2 joblib-1.2.0 psutil-5.9.4 pyparsing-3.0.9 requests-2.28.2 scikit-learn-1.2.2 scipy-1.10.1 threadpoolctl-3.1.0 torch_geometric-2.3.0 tqdm-4.65.0 urllib3-1.26.15\n"
+          ]
+        }
+      ],
+      "source": [
+        "!chmod 755 -R /content/gdrive/MyDrive/protein-env/bin/\n",
+        "#!source /content/gdrive/MyDrive/protein-env/bin/activate;pip install pandas;pip install openpyxl;pip install biopython;pip install networkx \n",
+        "!source /content/gdrive/MyDrive/protein-env/bin/activate;pip install torch_geometric"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "CWlXD1StjY6J"
+      },
+      "outputs": [],
+      "source": [
+        "import sys\n",
+        "sys.path.append(\"/content/gdrive/MyDrive/protein-env/lib/python3.9/site-packages\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dNY2y59bje7f",
+        "outputId": "b17d43f3-6854-44e4-e496-8e121755d0a2"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/gdrive/MyDrive/protein_project/src\n"
+          ]
+        }
+      ],
+      "source": [
+        "cd /content/gdrive/MyDrive/protein_project/src"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "MN2twDU7juIe",
+        "outputId": "8a5cd5fc-04af-42f5-d0f2-91a46b736bbb"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/gdrive/MyDrive/protein_project/src\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pwd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Fj983C4emNZ_"
+      },
+      "outputs": [],
+      "source": [
+        "import torch_geometric"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yyvLHb2Gjwyk",
+        "outputId": "d75b8320-dc87-4dcd-9deb-82383220ae54"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Retrieve the pickle!\n",
+            "[  53.   93. 1091.  146.   73.   13.   36.]\n",
+            "tensor([20.5849, 11.7312,  1.0000,  7.4726, 14.9452, 83.9231, 30.3056],\n",
+            "       dtype=torch.float64)\n",
+            "Epoch: 001 Train F1 Score: 0.6072108534088563 Test F1 Score:  0.5997191641514487\n",
+            "Epoch: 002 Train F1 Score: 0.04922956243871066 Test F1 Score:  0.05297128320384134\n",
+            "Epoch: 003 Train F1 Score: 0.45227655546933665 Test F1 Score:  0.4427547595000173\n",
+            "Epoch: 004 Train F1 Score: 0.6034480960012615 Test F1 Score:  0.6013798907416568\n",
+            "Epoch: 005 Train F1 Score: 0.5836832833573855 Test F1 Score:  0.5975516648935896\n",
+            "Epoch: 006 Train F1 Score: 0.3319876572998688 Test F1 Score:  0.33982639494044575\n",
+            "Epoch: 007 Train F1 Score: 0.5763192232533731 Test F1 Score:  0.5815039420462442\n",
+            "Epoch: 008 Train F1 Score: 0.41314716355187586 Test F1 Score:  0.39275392316149915\n",
+            "Epoch: 009 Train F1 Score: 0.4823651501706423 Test F1 Score:  0.4617493576604127\n",
+            "Epoch: 010 Train F1 Score: 0.635975126945747 Test F1 Score:  0.6241545256384216\n",
+            "Epoch: 011 Train F1 Score: 0.6274542152234601 Test F1 Score:  0.6302369060614288\n",
+            "Epoch: 012 Train F1 Score: 0.5762777756761616 Test F1 Score:  0.5541769429820098\n",
+            "Epoch: 013 Train F1 Score: 0.7099719992585265 Test F1 Score:  0.6962641585701435\n",
+            "Epoch: 014 Train F1 Score: 0.6791305819931052 Test F1 Score:  0.6615367888583145\n",
+            "Epoch: 015 Train F1 Score: 0.371357893268282 Test F1 Score:  0.3207112845100994\n",
+            "Epoch: 016 Train F1 Score: 0.5737046814426762 Test F1 Score:  0.5218565374909425\n",
+            "Epoch: 017 Train F1 Score: 0.5806465718495636 Test F1 Score:  0.5521412579078788\n",
+            "Epoch: 018 Train F1 Score: 0.7029225097861705 Test F1 Score:  0.652668236084703\n",
+            "Epoch: 019 Train F1 Score: 0.7110479916830763 Test F1 Score:  0.6539743417997357\n",
+            "Epoch: 020 Train F1 Score: 0.776237796080132 Test F1 Score:  0.7547924644036164\n",
+            "Epoch: 021 Train F1 Score: 0.6739262105192091 Test F1 Score:  0.6287082438113297\n",
+            "Epoch: 022 Train F1 Score: 0.6356172568271027 Test F1 Score:  0.6013721331553311\n",
+            "Epoch: 023 Train F1 Score: 0.7707953391647508 Test F1 Score:  0.737039104716048\n",
+            "Epoch: 024 Train F1 Score: 0.7768962865817398 Test F1 Score:  0.7104458117154899\n",
+            "Epoch: 025 Train F1 Score: 0.8011899266387448 Test F1 Score:  0.7376214900484879\n",
+            "Epoch: 026 Train F1 Score: 0.6985802535642661 Test F1 Score:  0.6553611737874697\n",
+            "Epoch: 027 Train F1 Score: 0.74914782878467 Test F1 Score:  0.7193170407470774\n",
+            "Epoch: 028 Train F1 Score: 0.7390022255482024 Test F1 Score:  0.6711065538496909\n",
+            "Epoch: 029 Train F1 Score: 0.8269028629467625 Test F1 Score:  0.7703728093317403\n",
+            "Epoch: 030 Train F1 Score: 0.8511377428713887 Test F1 Score:  0.791286523868069\n",
+            "Epoch: 031 Train F1 Score: 0.7925347457430963 Test F1 Score:  0.7703829964550806\n",
+            "Epoch: 032 Train F1 Score: 0.7815704973914186 Test F1 Score:  0.7636076247197072\n",
+            "Epoch: 033 Train F1 Score: 0.7887379063411172 Test F1 Score:  0.7597827225849597\n",
+            "Epoch: 034 Train F1 Score: 0.5397050387641091 Test F1 Score:  0.5543999710896568\n",
+            "Epoch: 035 Train F1 Score: 0.8297479020219347 Test F1 Score:  0.7701861803091724\n",
+            "Epoch: 036 Train F1 Score: 0.7448108741283285 Test F1 Score:  0.6902903359442594\n",
+            "Epoch: 037 Train F1 Score: 0.7116708906354887 Test F1 Score:  0.6423112019206996\n",
+            "Epoch: 038 Train F1 Score: 0.837481020146994 Test F1 Score:  0.7842397023726116\n",
+            "Epoch: 039 Train F1 Score: 0.7695945912313015 Test F1 Score:  0.7038407644467398\n",
+            "Epoch: 040 Train F1 Score: 0.7137486258429776 Test F1 Score:  0.6878208759865201\n",
+            "Epoch: 041 Train F1 Score: 0.6507540991910333 Test F1 Score:  0.6075670843943269\n",
+            "Epoch: 042 Train F1 Score: 0.8585974151740314 Test F1 Score:  0.8072321303264166\n",
+            "Epoch: 043 Train F1 Score: 0.8359708690882597 Test F1 Score:  0.7857574300485021\n",
+            "Epoch: 044 Train F1 Score: 0.7311643863753514 Test F1 Score:  0.6804007792379886\n",
+            "Epoch: 045 Train F1 Score: 0.5942898465867478 Test F1 Score:  0.5479385437598091\n",
+            "Epoch: 046 Train F1 Score: 0.8518009303204315 Test F1 Score:  0.7943284826532347\n",
+            "Epoch: 047 Train F1 Score: 0.7138569953943452 Test F1 Score:  0.6943529135172753\n",
+            "Epoch: 048 Train F1 Score: 0.6441525565168552 Test F1 Score:  0.5780456349960559\n",
+            "Epoch: 049 Train F1 Score: 0.7755543636665971 Test F1 Score:  0.7469807780933014\n",
+            "Epoch: 050 Train F1 Score: 0.6773505271440994 Test F1 Score:  0.6197211918278469\n",
+            "Epoch: 051 Train F1 Score: 0.6365852278001654 Test F1 Score:  0.6365074115836066\n",
+            "Epoch: 052 Train F1 Score: 0.8028649759152265 Test F1 Score:  0.7236878917864465\n",
+            "Epoch: 053 Train F1 Score: 0.7888056898990042 Test F1 Score:  0.7261187514672242\n",
+            "Epoch: 054 Train F1 Score: 0.7667725117831131 Test F1 Score:  0.7414820915180652\n",
+            "Epoch: 055 Train F1 Score: 0.8121184256295533 Test F1 Score:  0.7572942661805049\n",
+            "Epoch: 056 Train F1 Score: 0.7615022933169421 Test F1 Score:  0.7035389637073604\n",
+            "Epoch: 057 Train F1 Score: 0.4800482818336963 Test F1 Score:  0.4207554276937448\n",
+            "Epoch: 058 Train F1 Score: 0.6031421223904977 Test F1 Score:  0.6016593200627814\n",
+            "Epoch: 059 Train F1 Score: 0.7232026064358125 Test F1 Score:  0.6705261947085475\n",
+            "Epoch: 060 Train F1 Score: 0.7794129043716558 Test F1 Score:  0.748156401924302\n",
+            "Epoch: 061 Train F1 Score: 0.7970284547735292 Test F1 Score:  0.7387638220273105\n",
+            "Epoch: 062 Train F1 Score: 0.7793836178509299 Test F1 Score:  0.7221677048991215\n",
+            "Epoch: 063 Train F1 Score: 0.8377118913137802 Test F1 Score:  0.7767554917729128\n",
+            "Epoch: 064 Train F1 Score: 0.7430424353988336 Test F1 Score:  0.7042120591660427\n",
+            "Epoch: 065 Train F1 Score: 0.7785773765108854 Test F1 Score:  0.6962399789700854\n",
+            "Epoch: 066 Train F1 Score: 0.6812888746390057 Test F1 Score:  0.6035965954503433\n",
+            "Epoch: 067 Train F1 Score: 0.861579446629759 Test F1 Score:  0.7756908375783402\n",
+            "Epoch: 068 Train F1 Score: 0.8894491664230274 Test F1 Score:  0.8348729947689589\n",
+            "Epoch: 069 Train F1 Score: 0.8404255197987273 Test F1 Score:  0.7660579278349587\n",
+            "Epoch: 070 Train F1 Score: 0.8371453192164992 Test F1 Score:  0.7741691858994272\n",
+            "Epoch: 071 Train F1 Score: 0.6934762893402134 Test F1 Score:  0.647501241703605\n",
+            "Epoch: 072 Train F1 Score: 0.9008714929678878 Test F1 Score:  0.8246553626506213\n",
+            "Epoch: 073 Train F1 Score: 0.6951277598355811 Test F1 Score:  0.6281049992888036\n",
+            "Epoch: 074 Train F1 Score: 0.879760901225153 Test F1 Score:  0.8362744416725986\n",
+            "Epoch: 075 Train F1 Score: 0.914132398954205 Test F1 Score:  0.8413066103380127\n",
+            "Epoch: 076 Train F1 Score: 0.8625589694642661 Test F1 Score:  0.798090252911013\n",
+            "Epoch: 077 Train F1 Score: 0.9024434983078141 Test F1 Score:  0.8404965693871479\n",
+            "Epoch: 078 Train F1 Score: 0.8303856262019188 Test F1 Score:  0.793536299807725\n",
+            "Epoch: 079 Train F1 Score: 0.8558957880068092 Test F1 Score:  0.7798052836102856\n",
+            "Epoch: 080 Train F1 Score: 0.8754473888037664 Test F1 Score:  0.8108554690796085\n",
+            "Epoch: 081 Train F1 Score: 0.8998022225256506 Test F1 Score:  0.8195026428864237\n",
+            "Epoch: 082 Train F1 Score: 0.9074993757645881 Test F1 Score:  0.8250749818797319\n",
+            "Epoch: 083 Train F1 Score: 0.8617829666089227 Test F1 Score:  0.788318289941064\n",
+            "Epoch: 084 Train F1 Score: 0.9145595512323886 Test F1 Score:  0.8375505931249111\n",
+            "Epoch: 085 Train F1 Score: 0.9158334195414861 Test F1 Score:  0.8486412903485944\n",
+            "Epoch: 086 Train F1 Score: 0.9054537581710956 Test F1 Score:  0.8123891939405783\n",
+            "Epoch: 087 Train F1 Score: 0.8954056913008215 Test F1 Score:  0.8127999386937256\n",
+            "Epoch: 088 Train F1 Score: 0.9069977458704247 Test F1 Score:  0.812228721250626\n",
+            "Epoch: 089 Train F1 Score: 0.8707362849832715 Test F1 Score:  0.8250081041446028\n",
+            "Epoch: 090 Train F1 Score: 0.8185591718693082 Test F1 Score:  0.7657360544157327\n",
+            "Epoch: 091 Train F1 Score: 0.916397952650082 Test F1 Score:  0.855367661255962\n",
+            "Epoch: 092 Train F1 Score: 0.9104568490106716 Test F1 Score:  0.8338370820529931\n",
+            "Epoch: 093 Train F1 Score: 0.9131273910572415 Test F1 Score:  0.8227241494182798\n",
+            "Epoch: 094 Train F1 Score: 0.9141697370487034 Test F1 Score:  0.8280895657596643\n",
+            "Epoch: 095 Train F1 Score: 0.9075070698164989 Test F1 Score:  0.8310969378797209\n",
+            "Epoch: 096 Train F1 Score: 0.8518272864902909 Test F1 Score:  0.7659615458328792\n",
+            "Epoch: 097 Train F1 Score: 0.9266381428326472 Test F1 Score:  0.8775777841078809\n",
+            "Epoch: 098 Train F1 Score: 0.8196261606200497 Test F1 Score:  0.7744749177762872\n",
+            "Epoch: 099 Train F1 Score: 0.7843711331039207 Test F1 Score:  0.7327636537624285\n",
+            "The final weighted F1 score is:  0.7327636537624285\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python graphSAGE.py"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "CIBKsA4WDq3O"
+      },
+      "outputs": [],
+      "source": [
+        "!git config --global user.email \"sarthak.3300@yahoo.com\"\n",
+        "!git config --global user.name \"sarthakja\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-tq_3r1qD8Ps",
+        "outputId": "e79baadc-06dc-4186-ebd3-ab318efde806"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "On branch sarthak\n",
+            "nothing to commit, working tree clean\n"
+          ]
+        }
+      ],
+      "source": [
+        "#!git checkout -b sarthak\n",
+        "!git status"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "m0y7PU84FHz4",
+        "outputId": "aa013c62-cffd-482b-a805-3782764f0a45"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/gdrive/MyDrive/protein_project\n"
+          ]
+        }
+      ],
+      "source": [
+        "cd /content/gdrive/MyDrive/protein_project\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-rjr6hWhCnsJ",
+        "outputId": "6a548f5a-289e-4358-f922-6e3ff0528d2b"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "fatal: could not read Username for 'https://github.com': No such device or address\n"
+          ]
+        }
+      ],
+      "source": [
+        "#!git init\n",
+        "#!git add --all\n",
+        "#!git commit -m 'Adding basic graphSAGE'\n",
+        "#!git remote add origin https://github.com/annanguyen99/CS594_project.git\n",
+        "#!git remote add upstream https://github.com/annanguyen99/CS594_project.git\n",
+        "!git push -u origin sarthak\n",
+        "#!git remote -v\n",
+        "#!git remote rm upstream"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "D_w5-p3VwUn-"
+      },
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "accelerator": "GPU",
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNc9t1PXB60vZMHLFUk5c52"
+    },
+    "gpuClass": "standard",
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
