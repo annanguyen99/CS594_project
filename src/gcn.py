@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/content/gdrive/MyDrive/protein-env/lib/python3.9/site-packages")
+
 import os
 import pickle
 from utils import convert_pygraph
@@ -26,7 +29,13 @@ if os.path.isfile(networkx_graphs_path):
         print("Retrieve the pickle!")
         dataset = pickle.load(handle)
 
+# data = dataset[1]
+# print(data)
+# print(type(dataset))
+# print(type(dataset[0]))
+print(len(dataset))
 
+'''
 NUM_CLASSES = 7
 NUM_NODE_FEATURES = 33
 
@@ -124,3 +133,4 @@ df_cm = pd.DataFrame(cf_matrix / np.sum(cf_matrix, axis=1)[:, None], index=[i fo
 plt.figure(figsize=(12, 7))
 sns.heatmap(df_cm, annot=True)
 plt.savefig(dir + '/data/confusion_matrix.png')
+'''
